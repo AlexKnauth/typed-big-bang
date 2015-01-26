@@ -1,8 +1,11 @@
 # typed-big-bang
 
 ```(require typed/big-bang)```
+
 This does not provide a drop in replacement for big-bang from 2htdp/universe.
+
 Instead of a macro, it provides a function, which has keyword arguments for #:on-tick, #:to-draw, etc.
+
 You also have to provide a `world?` predicate, and use (inst big-bang World).
 
 An example world program:
