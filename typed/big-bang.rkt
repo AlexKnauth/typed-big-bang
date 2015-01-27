@@ -12,14 +12,14 @@
          KeyHandler
          PadHandler
          MouseHandler
-         (all-from-out "2htdp/image.rkt")
+         (all-from-out typed/2htdp/image)
          )
 
 (require typed/racket/class
          typed/racket/gui
          racket/local
          racket/function
-         "2htdp/image.rkt")
+         typed/2htdp/image)
 (require/typed racket/contract
                [contract-name [(Any -> Boolean) -> Sexp]])
 (require/typed mrlib/image-core

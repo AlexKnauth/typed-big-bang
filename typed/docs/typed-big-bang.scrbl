@@ -125,6 +125,8 @@ provides types for some functions from @racketmodname[2htdp/image], as well as a
 @defidform[#:kind "type" Image]{
 the type for images from @racketmodname[2htdp/image]}
 
+@defidform[#:kind "type" Image-Color]{a color}
+
 @defproc[(image? [v Any]) Boolean]{
 returns @racket[#t] if @racket[v] is an @racket[Image]}
 
@@ -134,7 +136,7 @@ returns @racket[#t] if @racket[v] is an @racket[Image]}
 returns an empty scene with the given @racket[width] and @racket[height]}
 @defproc[(overlay [i1 Image] [i2 Image] ...) Image]{
 overlays @racket[i1] on top of @racket[i2], and so on.}
-@defproc[(text [str String] [sise Natural] [color String]) Image]{
+@defproc[(text [str String] [size Natural] [color Image-Color]) Image]{
 returns an image with of @racket[str].}
 
 

@@ -2,5 +2,5 @@
 
 (define collection 'multi)
 
-(define deps '("base" "typed-racket-lib" "typed-racket-more" "htdp-lib" "gui-lib"))
+(define deps '("base" "typed-racket-lib" "typed-racket-more" "htdp-lib" "gui-lib" "2htdp-typed"))
 
