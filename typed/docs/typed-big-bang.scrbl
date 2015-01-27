@@ -3,7 +3,8 @@
 @(require (for-label
            typed/big-bang
            (only-in typed/racket Any -> : identity Positive-Real U Natural #;λ Boolean Symbol String
-                    Instance require #;define inst exact-integer? add1 Integer <= cond + else -)
+                    Instance require #;define inst exact-integer? add1 Integer <= cond + else -
+                    number->string)
            ))
 
 @title{typed-big-bang}
@@ -94,7 +95,7 @@ the type for a mouse event, corrosponding to MouseEvents from @racket[2htdp/univ
 @defidform[#:kind "type" PadEvent]{
 the type for a pad event, corrosponding to PadEvents from @racket[2htdp/universe]}
 
-@defstruct[stop-with ([w World])]{
+@defstruct*[stop-with ([w World])]{
 a struct to tell big bang to stop the world with the final state @racket[w].}
 
 @defproc[(key-event? [v Any]) Boolean]{
@@ -123,4 +124,17 @@ provides types for some functions from @racketmodname[2htdp/image], as well as a
 
 @defidform[#:kind "type" Image]{
 the type for images from @racketmodname[2htdp/image]}
+
+@defproc[(image? [v Any]) Boolean]{
+returns @racket[#t] if @racket[v] is an @racket[Image]}
+
+@defproc[(image-width [img Image]) Natural]{returns the width of @racket[img]}
+@defproc[(image-height [img Image]) Natural]{returns the height of @racket[img]}
+@defproc[(empty-scene [width Natural] [height Natural]) Image]{
+returns an empty scene with the given @racket[width] and @racket[height]}
+@defproc[(overlay [i1 Image] [i2 Image] ...) Image]{
+overlays @racket[i1] on top of @racket[i2], and so on.}
+@defproc[(text [str String] [sise Natural] [color String]) Image]{
+returns an image with of @racket[str].}
+
 

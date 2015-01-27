@@ -7,6 +7,6 @@
  [image-height [Image -> Natural]]
  [empty-scene [Natural Natural -> Image]]
  [overlay [Image Image * -> Image]]
- [text [String Natural String * -> Image]]
+ [text [String Natural String -> Image]]
  )
 
