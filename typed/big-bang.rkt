@@ -2,11 +2,16 @@
 
 (provide big-bang BigBang
          KeyEvent key-event? key=?
-         PadEvent pad-event?
-         MouseEvent mouse-event?
+         PadEvent pad-event? pad=?
+         MouseEvent mouse-event? mouse=?
          (struct-out stop-with)
          (struct-out package) make-package
          HandlerResult
+         TickHandler
+         Renderer
+         KeyHandler
+         PadHandler
+         MouseHandler
          (all-from-out "2htdp/image.rkt")
          )
 
