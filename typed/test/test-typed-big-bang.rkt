@@ -1,6 +1,7 @@
 #lang typed/racket
 
-(require "../big-bang.rkt")
+(require "../big-bang.rkt"
+         typed/2htdp/image)
 
 (define-type World Integer)
 

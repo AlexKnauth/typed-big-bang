@@ -39,7 +39,8 @@ a function that bahaves like big-bang from @racketmodname[2htdp/universe].
 An example world program:
 @racketmod[typed/racket
 
-(require typed/big-bang)
+(require typed/big-bang
+         typed/2htdp/image)
 
 (define-type World Integer)
 

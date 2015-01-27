@@ -12,7 +12,8 @@ An example world program:
 ```
 #lang typed/racket
 
-(require typed/big-bang)
+(require typed/big-bang
+         typed/2htdp/image)
 
 (define-type World Integer)
 
