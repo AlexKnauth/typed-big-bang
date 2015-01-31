@@ -3,9 +3,7 @@
 @(require (for-label
            typed/big-bang
            typed/2htdp/image
-           (only-in typed/racket Any -> : identity Positive-Real U Natural #;λ Boolean Symbol String
-                    Instance require #;define inst exact-integer? add1 Integer <= cond + else -
-                    number->string)
+           (only-meta-in 0 typed/racket)
            ))
 
 @title{typed-big-bang}
