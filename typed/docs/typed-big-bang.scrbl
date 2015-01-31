@@ -10,6 +10,8 @@
 
 @title{typed-big-bang}
 
+source code: @url["https://github.com/AlexKnauth/typed-big-bang"]
+
 @section{typed/big-bang}
 
 @defmodule[typed/big-bang]
