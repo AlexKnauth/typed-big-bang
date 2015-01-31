@@ -1,23 +1,14 @@
 #lang typed/racket/base
 
 (provide big-bang BigBang
-         KeyEvent key-event? key=?
-         PadEvent pad-event? pad=?
-         MouseEvent mouse-event? mouse=?
-         (struct-out stop-with)
-         (struct-out package) make-package
-         HandlerResult
-         TickHandler
-         Renderer
-         KeyHandler
-         PadHandler
-         MouseHandler
+         (all-from-out "try-to-use-2htdp/some-2htdp-universe.rkt")
          )
 
 (require typed/racket/class
          typed/racket/gui
          racket/local
          racket/function
+         "try-to-use-2htdp/some-2htdp-universe.rkt"
          (only-in typed/2htdp/image Image image? image-width image-height empty-scene))
 (require/typed racket/contract
                [contract-name [(Any -> Boolean) -> Sexp]])
@@ -65,107 +56,6 @@
     (send dc clear)
     (render-image image dc 0 0)
     bm))
-
-
-
-(define one? (make-predicate One))
-
-(: string-with-length-1? : [Any -> Boolean : #:+ String])
-(define (string-with-length-1? x)
-  (if (string? x)
-      (one? (string-length x))
-      #f))
-(define-type String-With-Length-1 (Opaque string-with-length-1?))
-
-(define-syntax define-1String-type
-  (lambda (stx)
-    (syntax-parse stx
-      [(def 1String)
-       #:with (str ...) (map string (map integer->char (range 0 256)))
-       #'(define-type 1String (U str ... String-With-Length-1))])))
-(define-1String-type 1String)
-
-(define-type KeyEvent
-  (U 1String
-     "left"
-     "right"
-     "up"
-     "down"
-     "start"
-     "cancel"
-     "clear"
-     "shift"
-     "rshift"
-     "control"
-     "rcontrol"
-     "menu"
-     "pause"
-     "capital"
-     "prior"
-     "next"
-     "end"
-     "home"
-     "escape"
-     "select"
-     "print"
-     "execute"
-     "snapshot"
-     "insert"
-     "help"
-     "numpad0" "numpad1" "numpad2" "numpad3" "numpad4" 
-     "numpad5" "numpad6" "numpad7" "numpad8" "numpad9" 
-     "numpad-enter" "multiply" "add" "separator" "subtract" "decimal" "divide"
-     "f1" "f2" "f3" "f4" "f5" "f6" "f7" "f8" "f9" "f10" "f11" "f12" "f13" 
-     "f14" "f15" "f16" "f17" "f18" "f19" "f20" "f21" "f22" "f23" "f24"
-     "numlock"
-     "scroll"
-     "wheel-up"
-     "wheel-down"
-     "wheel-left"
-     "wheel-right"
-     ))
-(define key-event? (make-predicate KeyEvent))
-
-(: key-event->string : [KeyEvent -> String])
-(define (key-event->string key)
-  (assert key string?))
-
-(: key=? : [KeyEvent KeyEvent KeyEvent * -> Boolean])
-(define (key=? key1 key2 . rst)
-  (apply string=? (key-event->string key1) (key-event->string key2) (map key-event->string rst)))
-
-(define-type PadEvent
-  (U "left" "right" "up" "down"
-     "w" "s" "a" "d"
-     " " "shift" "rshift"))
-(define pad-event? (make-predicate PadEvent))
-(: pad=? (PadEvent PadEvent PadEvent * -> Boolean))
-(define pad=? string=?)
-
-
-(define-type MouseEvent
-  (U "button-down" 
-     "button-up"
-     "drag"
-     "move"
-     "enter"
-     "leave"))
-(define mouse-event? (make-predicate MouseEvent))
-(: mouse=? (MouseEvent MouseEvent MouseEvent * -> Boolean))
-(define mouse=? string=?)
-
-(struct: (HR-World) stop-with ([w : HR-World]) #:transparent)
-(struct: (World) package ([w : World] [message : Sexp]) #:transparent)
-(: make-package : (All (World) [World Sexp -> (Package World)]))
-(define make-package package)
-
-(define-type (HandlerResult World)
-  (U (Maybe-Package World)
-     (stop-with (Maybe-Package World))))
-(define-type (Maybe-Package World)
-  (U World (Package World)))
-(define-type (Package World)
-  (package World))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -230,23 +120,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-type (TickHandler World)
-  [World -> (HandlerResult World)])
-
-(define-type (Renderer World)
-  [World -> Image])
-
-(define-type (KeyHandler World)
-  [World KeyEvent -> (HandlerResult World)])
-
-(define-type (PadHandler World)
-  [World PadEvent -> (HandlerResult World)])
-
-(define-type (MouseHandler World)
-  [World Integer Integer MouseEvent -> (HandlerResult World)])
-
 (define-type (BigBang World)
-  (-> (U World (stop-with World))
+  (-> (U World StopWith)
       [Any -> Boolean : World]
       [#:to-draw (Renderer World)]
       [#:width (U Natural #f)]
@@ -333,8 +208,8 @@
             (cond [(world? world) world]
                   [else (error 'typed-big-bang "expected ~v, but recieved ~v"
                                (contract-name world?) world)]))
-          (: current-world : (case-> [-> (U World (stop-with World))]
-                                     [(U World (stop-with World)) -> Void]))
+          (: current-world : (case-> [-> (U World StopWith)]
+                                     [(U World StopWith) -> Void]))
           (define current-world
             (case-lambda
               [() world]
@@ -385,7 +260,7 @@
                 (* 0.001 (elapsed-milliseconds)))
               (define (wait)
                 (sleep (max 0 (- (/ tick-rate) (elapsed-seconds)))))
-              (: maybe-recur : [(U World (stop-with World)) -> World])
+              (: maybe-recur : [(U World StopWith) -> World])
               (define (maybe-recur hr)
                 (cond [(stop-with? hr) (define last-world (check-world (stop-with-w hr)))
                                        (define last-scene (render last-world))
@@ -432,19 +307,19 @@
 
 (: handle-handler-result :
    (All (World)
-        (case-> [(Package World) [Any -> Boolean : World] -> World]
-                [(HandlerResult World) [Any -> Boolean : World] -> (U World (stop-with World))])))
+        (case-> [Package [Any -> Boolean : World] -> World]
+                [(HandlerResult World) [Any -> Boolean : World] -> (U World StopWith)])))
 (define (handle-handler-result pkg world?)
   (define hdl-pkg (inst handle-package World))
   (cond [(world? pkg) pkg]
-        [(package? pkg) (hdl-pkg (ann pkg (Package World)))]
-        [(stop-with? pkg) ((inst stop-with World)
-                           (hdl-pkg
-                            ((inst stop-with-w (U World (Package World)))
-                             pkg)))]
+        [(package? pkg) (hdl-pkg (ann pkg Package))]
+        [(stop-with? pkg) (define w (stop-with-w pkg))
+                          (cond [(world? w) pkg]
+                                [(package? w) (hdl-pkg w)]
+                                [else (assert w world?) (error 'bad)])]
         [else pkg]))
 
-(: handle-package : (All (World) [(U World (Package World)) -> World]))
+(: handle-package : (All (World) [(U World Package) -> World]))
 (define (handle-package pkg)
   (cond [(package? pkg) ....]
         [else pkg]))
