@@ -26,10 +26,31 @@
 
 (define-type Frame-with-callback (Instance Frame-with-callback%))
 (define-type Frame-with-callback%
-  (Class #:implements/inits Frame%
+  (Class #:implements Frame%
          (init-field [char-callback [Window (Instance Key-Event%) -> Any] #:optional]
                      [mouse-callback [Window (Instance Mouse-Event%) -> Any] #:optional]
                      [on-close-callback [-> Any] #:optional])
+         ;; copied from typed/racket/private/gui-types.rkt, from the definition of Frame%
+         (init [label String]
+               [parent (Option (Instance Frame%)) #:optional]
+               [width (Option Integer) #:optional]
+               [height (Option Integer) #:optional]
+               [x (Option Integer) #:optional]
+               [y (Option Integer) #:optional]
+               [style (Listof (U 'no-resize-border 'no-caption
+                                 'no-system-menu 'hide-menu-bar
+                                 'toolbar-button 'float 'metal))
+                      #:optional]
+               [enabled Any #:optional]
+               [border Natural #:optional]
+               [spacing Natural #:optional]
+               [alignment (List (U 'left 'center 'right)
+                                (U 'top 'center 'bottom))
+                          #:optional]
+               [min-width (Option Natural) #:optional]
+               [min-height (Option Natural) #:optional]
+               [stretchable-width Any #:optional]
+               [stretchable-height Any #:optional])
          ))
 (define frame-with-callback% : Frame-with-callback%
   (class frame% (super-new) (inspect #f)
