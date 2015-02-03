@@ -86,18 +86,20 @@ equivalent to @racket[[World PadEvent -> (HandlerResult World)]]}
 equivalent to @racket[[World Integer Integer MouseEvent -> (HandlerResult World)]]}
 
 @defform[#:kind "type" (HandlerResult World)]{
-equivalent to @racket[(U World (stop-with World))]}
+equivalent to @racket[(U World StopWith)]}
 
 @defidform[#:kind "type" KeyEvent]{
-the type for a key event, corrosponding to KeyEvents from @racket[2htdp/universe]}
+the type for a key event, corrosponding to KeyEvents from @racketmodname[2htdp/universe]}
 
 @defidform[#:kind "type" MouseEvent]{
-the type for a mouse event, corrosponding to MouseEvents from @racket[2htdp/universe]}
+the type for a mouse event, corrosponding to MouseEvents from @racketmodname[2htdp/universe]}
 
 @defidform[#:kind "type" PadEvent]{
-the type for a pad event, corrosponding to PadEvents from @racket[2htdp/universe]}
+the type for a pad event, corrosponding to PadEvents from @racketmodname[2htdp/universe]}
 
-@defstruct*[stop-with ([w World])]{
+@deftogether[[
+@defidform[#:kind "type" StopWith]
+@defstruct*[stop-with ([w World])]]]{
 a struct to tell big bang to stop the world with the final state @racket[w].}
 
 @defproc[(key-event? [v Any]) Boolean]{
@@ -121,7 +123,7 @@ returns @racket[#t] if the given @racket[MouseEvent]s are equal.}
 @section{typed/2htdp/image}
 
 @defmodule[typed/2htdp/image]{
-provides types for some functions from @racketmodname[2htdp/image], as well as an @racket[Image] type.
+provides types for some functions from @racketmodname[2htdp/image].
 }
 
 @defidform[#:kind "type" Image]{
@@ -139,6 +141,6 @@ returns an empty scene with the given @racket[width] and @racket[height]}
 @defproc[(overlay [i1 Image] [i2 Image] ...) Image]{
 overlays @racket[i1] on top of @racket[i2], and so on.}
 @defproc[(text [str String] [size Natural] [color Image-Color]) Image]{
-returns an image with of @racket[str].}
+returns an image that draws @racket[str].}
 
 
