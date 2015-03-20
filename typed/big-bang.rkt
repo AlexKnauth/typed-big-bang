@@ -9,11 +9,10 @@
          racket/local
          racket/function
          "try-to-use-2htdp/some-2htdp-universe.rkt"
+         "2htdp/image-to-bitmap.rkt"
          (only-in typed/2htdp/image Image image? image-width image-height empty-scene))
 (require/typed racket/contract
                [contract-name [(Any -> Boolean) -> Sexp]])
-(require/typed mrlib/image-core
-               [render-image [Image (Object) Real Real -> Void]])
 (require (for-syntax racket/base syntax/parse racket/list))
 
 (define-syntax (.... stx)
@@ -46,16 +45,6 @@
       (on-close-callback)
       (void))))
 
-
-(: image->bitmap : [Image -> Bitmap])
-(define (image->bitmap image)
-  (let*: ([width (assert (image-width image) exact-positive-integer?)]
-          [height (assert (image-height image) exact-positive-integer?)]
-          [bm : Bitmap (make-bitmap width height)]
-          [dc : Bitmap-DC (make-object bitmap-dc% bm)])
-    (send dc clear)
-    (render-image image dc 0 0)
-    bm))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
