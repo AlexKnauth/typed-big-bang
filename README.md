@@ -1,5 +1,7 @@
 # typed-big-bang
 
+see also [lexi-lambda/racket-2htdp-typed](https://github.com/lexi-lambda/racket-2htdp-typed)
+
 ```(require typed/big-bang)```
 
 This does not provide a drop in replacement for big-bang from 2htdp/universe.
