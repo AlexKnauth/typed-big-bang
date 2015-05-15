@@ -4,5 +4,5 @@
 
 (define deps '("base" "typed-racket-lib" "typed-racket-more" "htdp-lib" "gui-lib" "2htdp-typed"))
 
-(define build-deps '("scribble-lib"))
+(define build-deps '("scribble-lib" "racket-doc" "htdp-doc" "typed-racket-doc"))
 
