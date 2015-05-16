@@ -14,6 +14,8 @@ source code: @url["https://github.com/AlexKnauth/typed-big-bang"]
 
 @defmodule[typed/big-bang]
 
+@margin-note{see also @racketmodname[typed/2htdp/universe]}
+
 @defproc[
 (big-bang [init-state World]
           [world? [Any -> Boolean : World]]
